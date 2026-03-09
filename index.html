@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vertical · magazine about the inner</title>
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #f0e9e0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Декоративные шарики */
+        .blob {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(200, 160, 100, 0.2), rgba(80, 60, 30, 0.05));
+            filter: blur(70px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .blob-1 { top: -150px; right: -100px; background: radial-gradient(circle at 30% 30%, rgba(220, 180, 100, 0.25), rgba(100, 70, 20, 0.03)); }
+        .blob-2 { bottom: -150px; left: -100px; width: 500px; height: 500px; background: radial-gradient(circle at 70% 70%, rgba(180, 140, 80, 0.15), rgba(60, 40, 10, 0.02)); }
+        .blob-3 { top: 40%; left: 20%; width: 300px; height: 300px; background: radial-gradient(circle at 20% 80%, rgba(200, 150, 70, 0.15), transparent); }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 2rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Быстрая навигация справа */
+        .quick-nav {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 3px;
+            height: 24px;
+            background: #4d443c;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 2px;
+        }
+
+        .nav-dot:hover {
+            background: #c9a86b;
+            height: 32px;
+        }
+
+        .nav-dot.active {
+            background: #c9a86b;
+            height: 32px;
+        }
+
+        /* Шапка с авторизацией */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #2a2a2a;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 320;
+            color: #ffffff;
+            line-height: 1.1;
+        }
+
+        .logo span {
+            color: #c9a86b;
+            font-weight: 250;
+            font-size: 1.8rem;
+            display: block;
+        }
+
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-btn {
+            background: rgba(20, 18, 16, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #c9a86b60;
+            color: #dbb773;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
+            white-space: nowrap;
+        }
+
+        .auth-btn:hover {
+            background: rgba(40, 35, 30, 0.9);
+            border-color: #c9a86b;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(20, 18, 16, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #4d443c;
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem 0.5rem 0.8rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #c9a86b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .user-name {
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #4d443c;
+            color: #a39281;
+            padding: 0.4rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .logout-btn:hover {
+            border-color: #c9a86b;
+            color: #dbb773;
+        }
+
+        /* Модальное окно авторизации */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-modal-content {
+            background: rgba(15, 15, 15, 0.98);
+            border: 1px solid #c9a86b60;
+            border-radius: 40px;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .auth-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #c9a86b;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #4d443c;
+            padding-bottom: 1rem;
+        }
+
+        .auth-tab {
+            background: none;
+            border: none;
+            color: #a39281;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.3rem 0;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .auth-tab.active {
+            color: #c9a86b;
+            border-bottom: 2px solid #c9a86b;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #4d443c;
+            border-radius: 30px;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: #c9a86b;
+        }
+
+        .auth-submit {
+            width: 100%;
+            background: #c9a86b;
+            border: none;
+            border-radius: 30px;
+            padding: 0.8rem;
+            color: #000;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .auth-error {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .auth-error.show {
+            display: block;
+        }
+
+        /* Основные секции */
+        .section { 
+            margin-bottom: 6rem; 
+            scroll-margin-top: 2rem;
+        }
+        
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+            margin-bottom: 2.5rem; 
+        }
+        
+        .section-number { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.2rem; 
+            color: #c9a86b; 
+            font-style: italic; 
+        }
+        
+        .section-title { 
+            font-size: 2.8rem; 
+            font-weight: 320; 
+            color: #ffffff; 
+            line-height: 1.1; 
+        }
+        
+        .section-title-light { 
+            font-weight: 280; 
+            color: #b9aa9a; 
+        }
+
+        .glass-card {
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(200, 160, 100, 0.15);
+            padding: 3rem;
+            border-radius: 48px;
+        }
+
+        .description-text { 
+            font-size: 1.2rem; 
+            color: #e8dfd3; 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        .description-text p { margin-bottom: 1.5rem; }
+
+        .accent-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-style: italic;
+            color: #dbb773;
+            text-align: center;
+            margin: 3rem 0 1rem;
+            border-top: 1px dashed #5f5549;
+            padding-top: 2rem;
+        }
+
+        /* Создатель */
+        .creator-full {
+            background: rgba(20, 18, 16, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #4d443c;
+            border-radius: 40px;
+            padding: 3rem;
+        }
+
+        .creator-name { 
+            font-size: 2.5rem; 
+            font-weight: 320; 
+            color: #ffffff; 
+            margin-bottom: 0.5rem; 
+        }
+        
+        .creator-role { 
+            font-size: 1rem; 
+            color: #c9a86b; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            margin-bottom: 1.5rem; 
+            border-bottom: 1px solid #4d443c; 
+            padding-bottom: 1rem; 
+        }
+        
+        .creator-bio { 
+            color: #cfc4b8; 
+            font-size: 1.1rem; 
+            max-width: 600px;
+        }
+        
+        .creator-bio p { 
+            margin-bottom: 1.2rem; 
+        }
+        
+        .creator-link { 
+            color: #dbb773; 
+            text-decoration: none; 
+            border-bottom: 1px solid #dbb773; 
+        }
+        
+        .creator-link:hover { 
+            opacity: 0.7; 
+        }
+        
+        .creator-quote { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.3rem; 
+            font-style: italic; 
+            color: #d4bcab; 
+            border-left: 2px solid #c9a86b; 
+            padding-left: 1.5rem; 
+            margin-top: 1.5rem; 
+        }
+
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .issue-card {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid #c9a86b40;
+            border-radius: 30px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .issue-card:hover {
+            transform: translateY(-5px);
+            border-color: #c9a86b;
+            background: rgba(25, 23, 20, 0.7);
+        }
+
+        .issue-cover {
+            width: 100%;
+            aspect-ratio: 3/4;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            border: 1px solid #c9a86b60;
+        }
+
+        .issue-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .issue-number { font-size: 0.8rem; color: #c9a86b; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+        .issue-title { font-size: 1.5rem; font-weight: 350; color: #ffffff; margin-bottom: 0.5rem; }
+        .issue-title .label { color: #a39281; font-size: 0.9rem; font-weight: 300; margin-right: 0.3rem; }
+        .issue-date { font-size: 0.9rem; color: #a39281; margin-bottom: 0.8rem; border-bottom: 1px solid #4d443c; padding-bottom: 0.8rem; }
+        .issue-description { color: #cfc4b8; font-size: 0.95rem; margin-bottom: 1rem; flex-grow: 1; }
+        .issue-tag { display: inline-block; background: rgba(201, 168, 107, 0.1); border: 1px solid #c9a86b60; border-radius: 30px; padding: 0.3rem 1.2rem; font-size: 0.8rem; color: #dbb773; }
+
+        /* Модальное окно выпуска */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1500;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: rgba(15, 15, 15, 0.98);
+            border: 1px solid #c9a86b60;
+            border-radius: 40px;
+            padding: 2.5rem;
+            max-width: 1100px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #c9a86b;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+        }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .gallery-main {
+            width: 100%;
+            aspect-ratio: 3/4;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #c9a86b60;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.5s ease;
+        }
+
+        .gallery-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4d443c;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gallery-dot.active {
+            background: #c9a86b;
+            transform: scale(1.2);
+        }
+
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #c9a86b60;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .gallery-arrow:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: #c9a86b;
+        }
+
+        .gallery-arrow.prev { left: 10px; }
+        .gallery-arrow.next { right: 10px; }
+
+        .modal-info h3 { font-size: 2.2rem; color: #ffffff; margin-bottom: 0.5rem; }
+        .modal-date { font-size: 1rem; color: #c9a86b; margin-bottom: 1.5rem; border-bottom: 1px solid #4d443c; padding-bottom: 1rem; }
+        .modal-description { font-size: 1.2rem; color: #e0d4c8; margin-bottom: 2rem; line-height: 1.7; }
+
+        .footer {
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid #2a2a2a;
+            text-align: center;
+            color: #7a6f66;
+        }
+
+        @media (max-width: 800px) {
+            .quick-nav { display: none; }
+            .container { padding: 2rem; }
+            .modal-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 2.2rem; }
+            .gallery-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- Быстрая навигация справа -->
+    <div class="quick-nav">
+        <div class="nav-dot" data-section="about"></div>
+        <div class="nav-dot" data-section="creator"></div>
+        <div class="nav-dot" data-section="issues"></div>
+    </div>
+
+    <div class="container">
+        <!-- ШАПКА -->
+        <div class="header">
+            <div class="logo">
+                <h1>The Vertical <span>— the axis of meaning</span></h1>
+            </div>
+            <div class="auth-section" id="authSection"></div>
+        </div>
+
+        <!-- СЕКЦИЯ 1: О ЖУРНАЛЕ -->
+        <section class="section" id="about">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">about<span class="section-title-light">.</span></h2>
+            </div>
+            <div class="glass-card">
+                <div class="description-text">
+                    <p><strong>The Vertical</strong> is an online magazine about people, their inner world, and the stories behind the facade of publicity. Our focus is thoughts, feelings, principles, and the search for meaning.</p>
+                    <p>Each piece is an attempt to look beyond the obvious and truly understand a person.</p>
+                </div>
+                <div class="accent-quote">— behind the facade, there is always someone. we seek the vertical.</div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 2: СОЗДАТЕЛЬ -->
+        <section class="section" id="creator">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">creator<span class="section-title-light">.</span></h2>
+            </div>
+            <div class="creator-full">
+                <div class="creator-name">Alexander Sokolov</div>
+                <div class="creator-role">founder, editor</div>
+                <div class="creator-bio">
+                    <p>Born in 1998 in Moscow. Founded The Vertical in 2026.</p>
+                    <p>Personal <a href="https://asksokolov.github.io/mybiography" target="_blank" class="creator-link">website</a>.</p>
+                </div>
+                <div class="creator-quote">«Criticism is a way of dialogue»</div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ 3: ВЫПУСКИ -->
+        <section class="section" id="issues">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">issues<span class="section-title-light">.</span></h2>
+            </div>
+            <div class="issues-grid">
+                <!-- Выпуск 1 -->
+                <div class="issue-card" data-issue="1">
+                    <div class="issue-cover">
+                        <img src="https://i.postimg.cc/GhrzR21X/Vertical-1.png" alt="The Vertical issue 1" loading="lazy">
+                    </div>
+                    <div class="issue-number">first issue</div>
+                    <h3 class="issue-title"><span class="label">model:</span> Selina Tan</h3>
+                    <div class="issue-date">March 8, 2026</div>
+                    <div class="issue-description">
+                        An honest conversation about inner silence, life in front of the camera, and finding oneself.
+                    </div>
+                    <span class="issue-tag">interview</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ПОДВАЛ -->
+        <footer class="footer">
+            <div>© The Vertical, 2026</div>
+        </footer>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close" id="closeAuthModal">&times;</button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+
+            <!-- Форма входа -->
+            <div class="auth-form active" id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button class="auth-submit" id="loginSubmit">Login</button>
+                <div class="auth-error" id="loginError"></div>
+            </div>
+
+            <!-- Форма регистрации -->
+            <div class="auth-form" id="registerForm">
+                <input type="text" id="registerName" placeholder="Name">
+                <input type="email" id="registerEmail" placeholder="Email">
+                <input type="password" id="registerPassword" placeholder="Password">
+                <button class="auth-submit" id="registerSubmit">Register</button>
+                <div class="auth-error" id="registerError"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ВЫПУСКА -->
+    <div class="modal" id="issueModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-grid" id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Данные выпуска
+        const issueData = {
+            name: "Selina Tan",
+            date: "March 8, 2026",
+            description: "In the first issue of The Vertical — a conversation with model Selina Tan about what remains behind the scenes, about inner silence, and about how not to lose yourself when your face is part of the profession. Frankly about fears, doubts, and points of support.",
+            photos: [
+                "https://i.postimg.cc/GhrzR21X/Vertical-1.png",
+                "https://i.postimg.cc/ry5g747d/Vertical-2.png",
+                "https://i.postimg.cc/6qV0RsC0/Vertical-3.png",
+                "https://i.postimg.cc/mk3wMx7y/Vertical-4.png",
+                "https://i.postimg.cc/0jGfmg7Y/Vertical-5.png",
+                "https://i.postimg.cc/rsGJW65S/Vertical-6.png"
+            ]
+        };
+
+        // ========== СИСТЕМА АВТОРИЗАЦИИ ==========
+        let currentUser = null;
+
+        // База пользователей (в реальном проекте это будет на сервере)
+        let users = [];
+
+        // Загружаем пользователя из localStorage
+        try {
+            const saved = localStorage.getItem('vertical_user');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+            }
+        } catch (e) {}
+
+        // Загружаем базу пользователей
+        try {
+            const savedUsers = localStorage.getItem('vertical_users');
+            if (savedUsers) {
+                users = JSON.parse(savedUsers);
+            }
+        } catch (e) {}
+
+        function saveUsers() {
+            localStorage.setItem('vertical_users', JSON.stringify(users));
+        }
+
+        // Валидация email
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        const authSection = document.getElementById('authSection');
+        const authModal = document.getElementById('authModal');
+        const closeAuthModal = document.getElementById('closeAuthModal');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginError = document.getElementById('loginError');
+        const registerError = document.getElementById('registerError');
+
+        function setUser(user) {
+            currentUser = user;
+            localStorage.setItem('vertical_user', JSON.stringify(user));
+            updateAuthUI();
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('vertical_user');
+            updateAuthUI();
+        }
+
+        function updateAuthUI() {
+            if (currentUser) {
+                authSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${currentUser.name.charAt(0)}</div>
+                        <span class="user-name">${currentUser.name}</span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                `;
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+            } else {
+                authSection.innerHTML = `
+                    <button class="auth-btn" id="showAuthModal">Login / Register</button>
+                `;
+                document.getElementById('showAuthModal').addEventListener('click', () => {
+                    authModal.classList.add('active');
+                });
+            }
+        }
+
+        // Переключение табов
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                authTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                if (tab.dataset.tab === 'login') {
+                    loginForm.classList.add('active');
+                    registerForm.classList.remove('active');
+                } else {
+                    registerForm.classList.add('active');
+                    loginForm.classList.remove('active');
+                }
+            });
+        });
+
+        closeAuthModal.addEventListener('click', () => {
+            authModal.classList.remove('active');
+            loginError.classList.remove('show');
+            registerError.classList.remove('show');
+        });
+
+        // Вход
+        document.getElementById('loginSubmit').addEventListener('click', () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                loginError.textContent = 'Please fill all fields';
+                loginError.classList.add('show');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                loginError.textContent = 'Please enter a valid email address';
+                loginError.classList.add('show');
+                return;
+            }
+
+            // Ищем пользователя в базе
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                setUser(user);
+                authModal.classList.remove('active');
+                loginError.classList.remove('show');
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            } else {
+                loginError.textContent = 'Invalid email or password';
+                loginError.classList.add('show');
+            }
+        });
+
+        // Регистрация
+        document.getElementById('registerSubmit').addEventListener('click', () => {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (!name || !email || !password) {
+                registerError.textContent = 'Please fill all fields';
+                registerError.classList.add('show');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                registerError.textContent = 'Please enter a valid email address';
+                registerError.classList.add('show');
+                return;
+            }
+
+            if (password.length < 6) {
+                registerError.textContent = 'Password must be at least 6 characters';
+                registerError.classList.add('show');
+                return;
+            }
+
+            // Проверяем, не занят ли email
+            if (users.some(u => u.email === email)) {
+                registerError.textContent = 'Email already registered';
+                registerError.classList.add('show');
+                return;
+            }
+
+            // Создаем нового пользователя
+            const newUser = {
+                name: name,
+                email: email,
+                password: password
+            };
+
+            users.push(newUser);
+            saveUsers();
+            setUser(newUser);
+            
+            authModal.classList.remove('active');
+            registerError.classList.remove('show');
+            
+            // Очищаем форму
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+        });
+
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.classList.remove('active');
+                loginError.classList.remove('show');
+                registerError.classList.remove('show');
+            }
+        });
+
+        // ========== НАВИГАЦИЯ ==========
+        const sections = {
+            about: document.getElementById('about'),
+            creator: document.getElementById('creator'),
+            issues: document.getElementById('issues')
+        };
+
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        function updateActiveDot() {
+            const scrollPosition = window.scrollY + 100;
+
+            for (const [key, section] of Object.entries(sections)) {
+                if (section) {
+                    const offsetTop = section.offsetTop;
+                    const offsetBottom = offsetTop + section.offsetHeight;
+
+                    if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+                        navDots.forEach(dot => {
+                            dot.classList.toggle('active', dot.dataset.section === key);
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+
+        navDots.forEach(dot => {
+            dot.dataset.section = dot.dataset.section || 
+                (Array.from(navDots).indexOf(dot) === 0 ? 'about' : 
+                 Array.from(navDots).indexOf(dot) === 1 ? 'creator' : 'issues');
+            
+            dot.addEventListener('click', () => {
+                const sectionId = dot.dataset.section;
+                if (sections[sectionId]) {
+                    sections[sectionId].scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        window.addEventListener('scroll', updateActiveDot);
+        window.addEventListener('load', updateActiveDot);
+
+        // ========== МОДАЛЬНОЕ ОКНО ВЫПУСКА ==========
+        const modal = document.getElementById('issueModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeBtn = document.getElementById('closeModal');
+        let slideshowInterval = null;
+        let currentPhotoIndex = 0;
+        let isTransitioning = false;
+
+        function renderGallery(photos, container) {
+            currentPhotoIndex = 0;
+            
+            const galleryHtml = `
+                <div class="gallery-container">
+                    <div class="gallery-main">
+                        <img src="${photos[0]}" alt="Issue photo" id="galleryImage" style="transition: opacity 0.5s ease;">
+                    </div>
+                    <div class="gallery-arrow prev" id="prevPhoto">←</div>
+                    <div class="gallery-arrow next" id="nextPhoto">→</div>
+                    <div class="gallery-nav" id="galleryDots">
+                        ${photos.map((_, i) => `<span class="gallery-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = galleryHtml + container.innerHTML;
+            
+            function updatePhoto(index) {
+                if (isTransitioning) return;
+                if (index >= 0 && index < photos.length) {
+                    isTransitioning = true;
+                    const img = document.getElementById('galleryImage');
+                    img.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        currentPhotoIndex = index;
+                        img.src = photos[index];
+                        img.style.opacity = '1';
+                        
+                        document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+                            dot.classList.toggle('active', i === index);
+                        });
+                        
+                        setTimeout(() => {
+                            isTransitioning = false;
+                        }, 100);
+                    }, 500);
+                }
+            }
+
+            document.getElementById('prevPhoto').addEventListener('click', (e) => {
+                e.stopPropagation();
+                let newIndex = currentPhotoIndex - 1;
+                if (newIndex < 0) newIndex = photos.length - 1;
+                updatePhoto(newIndex);
+                resetSlideshow();
+            });
+
+            document.getElementById('nextPhoto').addEventListener('click', (e) => {
+                e.stopPropagation();
+                let newIndex = currentPhotoIndex + 1;
+                if (newIndex >= photos.length) newIndex = 0;
+                updatePhoto(newIndex);
+                resetSlideshow();
+            });
+
+            document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    updatePhoto(i);
+                    resetSlideshow();
+                });
+            });
+
+            function startSlideshow() {
+                if (slideshowInterval) clearInterval(slideshowInterval);
+                slideshowInterval = setInterval(() => {
+                    let newIndex = currentPhotoIndex + 1;
+                    if (newIndex >= photos.length) newIndex = 0;
+                    updatePhoto(newIndex);
+                }, 5000);
+            }
+
+            function resetSlideshow() {
+                if (slideshowInterval) {
+                    clearInterval(slideshowInterval);
+                    startSlideshow();
+                }
+            }
+
+            startSlideshow();
+        }
+
+        document.querySelectorAll('.issue-card').forEach(card => {
+            card.addEventListener('click', () => {
+                modalContent.innerHTML = '';
+                
+                const leftCol = document.createElement('div');
+                leftCol.className = 'gallery-container';
+                
+                const rightCol = document.createElement('div');
+                rightCol.className = 'modal-info';
+                rightCol.innerHTML = `
+                    <h3>${issueData.name}</h3>
+                    <div class="modal-date">${issueData.date}</div>
+                    <div class="modal-description">${issueData.description}</div>
+                `;
+                
+                modalContent.appendChild(leftCol);
+                modalContent.appendChild(rightCol);
+                
+                renderGallery(issueData.photos, leftCol);
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            if (slideshowInterval) {
+                clearInterval(slideshowInterval);
+                slideshowInterval = null;
+            }
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                if (slideshowInterval) {
+                    clearInterval(slideshowInterval);
+                    slideshowInterval = null;
+                }
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                if (slideshowInterval) {
+                    clearInterval(slideshowInterval);
+                    slideshowInterval = null;
+                }
+            }
+        });
+
+        // Инициализация
+        updateAuthUI();
+    </script>
+</body>
+</html>
