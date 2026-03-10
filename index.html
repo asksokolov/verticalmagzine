@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,6 +25,10 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+        }
+
+        body.modal-active {
+            overflow: hidden;
         }
 
         /* Декоративные шарики */
@@ -287,6 +291,219 @@
 
         .auth-error.show {
             display: block;
+        }
+
+        /* 18+ предупреждение */
+        .age-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .age-modal.active {
+            display: flex;
+        }
+
+        .age-modal-content {
+            background: rgba(20, 18, 16, 0.95);
+            border: 2px solid #c9a86b;
+            border-radius: 60px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .age-circle {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #c9a86b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem auto;
+            background: rgba(201, 168, 107, 0.1);
+        }
+
+        .age-circle span {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: #c9a86b;
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+
+        .age-text {
+            font-size: 1.2rem;
+            color: #d4bcab;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .age-warning {
+            font-size: 1rem;
+            color: #c9a86b;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2.5rem;
+            padding: 1rem;
+            border: 1px solid #c9a86b40;
+            border-radius: 40px;
+        }
+
+        .age-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .age-btn {
+            background: transparent;
+            border: 1px solid #c9a86b60;
+            color: #dbb773;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .age-btn:hover {
+            background: #c9a86b;
+            color: #000000;
+            border-color: #c9a86b;
+        }
+
+        .age-btn.exit {
+            border-color: #ff6b6b40;
+            color: #ff6b6b;
+        }
+
+        .age-btn.exit:hover {
+            background: #ff6b6b;
+            color: #000000;
+            border-color: #ff6b6b;
+        }
+
+        /* Cookie Consent Banner */
+        .cookie-banner {
+            display: none;
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid #c9a86b60;
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            z-index: 4000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .cookie-banner.active {
+            display: block;
+        }
+
+        .cookie-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .cookie-text {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .cookie-text h3 {
+            font-size: 1.2rem;
+            color: #c9a86b;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        .cookie-text p {
+            font-size: 0.95rem;
+            color: #d4bcab;
+            line-height: 1.5;
+        }
+
+        .cookie-text a {
+            color: #dbb773;
+            text-decoration: none;
+            border-bottom: 1px solid #dbb773;
+        }
+
+        .cookie-text a:hover {
+            opacity: 0.7;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .cookie-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .cookie-btn.accept {
+            background: #c9a86b;
+            border-color: #c9a86b;
+            color: #000000;
+        }
+
+        .cookie-btn.accept:hover {
+            background: #dbb773;
+            border-color: #dbb773;
+        }
+
+        .cookie-btn.decline {
+            background: transparent;
+            border-color: #ff6b6b60;
+            color: #ff6b6b;
+        }
+
+        .cookie-btn.decline:hover {
+            background: #ff6b6b20;
+            border-color: #ff6b6b;
+        }
+
+        .cookie-btn.policy {
+            background: transparent;
+            border-color: #4d443c;
+            color: #a39281;
+        }
+
+        .cookie-btn.policy:hover {
+            border-color: #c9a86b;
+            color: #dbb773;
         }
 
         /* Основные секции */
@@ -591,6 +808,22 @@
                 height: 30px;
                 font-size: 1rem;
             }
+            .age-buttons {
+                flex-direction: column;
+            }
+            .cookie-banner {
+                bottom: 1rem;
+                padding: 1.2rem;
+                border-radius: 30px;
+            }
+            .cookie-content {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .cookie-buttons {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -598,6 +831,36 @@
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
+
+    <!-- 18+ предупреждение -->
+    <div class="age-modal" id="ageModal">
+        <div class="age-modal-content">
+            <div class="age-circle">
+                <span>18+</span>
+            </div>
+            <div class="age-text">This website contains mature content that may not be suitable for viewers under 18 years of age.</div>
+            <div class="age-warning">By entering, you confirm that you are at least 18 years old</div>
+            <div class="age-buttons">
+                <button class="age-btn" id="confirmAge">I am 18+</button>
+                <button class="age-btn exit" id="exitSite">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h3>🍪 Cookie Policy</h3>
+                <p>We use cookies to enhance your experience on our website. By clicking "Accept", you consent to the use of all cookies. You can also choose to decline or view our <a href="#" id="cookiePolicyLink">Cookie Policy</a> for more information.</p>
+            </div>
+            <div class="cookie-buttons">
+                <button class="cookie-btn accept" id="acceptCookies">Accept</button>
+                <button class="cookie-btn decline" id="declineCookies">Decline</button>
+                <button class="cookie-btn policy" id="viewPolicy">Policy</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Быстрая навигация справа -->
     <div class="quick-nav">
@@ -714,6 +977,85 @@
     </div>
 
     <script>
+        // ========== COOKIES ФУНКЦИИ ==========
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=Strict";
+            console.log('✅ Cookie set:', name, '=', value);
+        }
+
+        function getCookie(name) {
+            const cookieName = name + "=";
+            const cookies = document.cookie.split(';');
+            for(let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(cookieName) === 0) {
+                    const value = cookie.substring(cookieName.length, cookie.length);
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
+        // ========== COOKIE CONSENT ==========
+        function checkCookieConsent() {
+            const consent = getCookie('cookie_consent');
+            if (!consent) {
+                // Если пользователь еще не сделал выбор, показываем баннер
+                document.getElementById('cookieBanner').classList.add('active');
+            } else {
+                console.log('🍪 Cookie consent already given:', consent);
+            }
+        }
+
+        function acceptCookies() {
+            setCookie('cookie_consent', 'accepted', 365);
+            document.getElementById('cookieBanner').classList.remove('active');
+            console.log('✅ Cookies accepted');
+        }
+
+        function declineCookies() {
+            setCookie('cookie_consent', 'declined', 365);
+            document.getElementById('cookieBanner').classList.remove('active');
+            console.log('❌ Cookies declined');
+        }
+
+        function showCookiePolicy() {
+            alert('Cookie Policy: We use essential cookies for site functionality and preference cookies to remember your settings. You can choose to accept or decline non-essential cookies. For more information, please contact us.');
+        }
+
+        // ========== 18+ ПРОВЕРКА ==========
+        function checkAge() {
+            const ageConfirmed = getCookie('age_confirmed');
+            
+            if (!ageConfirmed) {
+                document.getElementById('ageModal').classList.add('active');
+                document.body.classList.add('modal-active');
+            }
+        }
+
+        function confirmAge() {
+            setCookie('age_confirmed', 'true', 365);
+            document.getElementById('ageModal').classList.remove('active');
+            document.body.classList.remove('modal-active');
+            
+            // После подтверждения возраста проверяем cookie consent
+            checkCookieConsent();
+        }
+
+        function exitSite() {
+            window.location.href = 'https://www.google.com';
+        }
+
         // Данные выпуска
         const issueData = {
             name: "Selina Tan",
@@ -731,17 +1073,22 @@
 
         // ========== СИСТЕМА АВТОРИЗАЦИИ ==========
         let currentUser = null;
-
-        // База пользователей (в реальном проекте это будет на сервере)
         let users = [];
 
-        // Загружаем пользователя из localStorage
+        // Загружаем пользователя из cookies и localStorage
         try {
+            const sessionId = getCookie('session');
             const saved = localStorage.getItem('vertical_user');
-            if (saved) {
+            
+            if (saved && sessionId) {
                 currentUser = JSON.parse(saved);
+            } else {
+                localStorage.removeItem('vertical_user');
+                deleteCookie('session');
             }
-        } catch (e) {}
+        } catch (e) {
+            console.error('Error loading user:', e);
+        }
 
         // Загружаем базу пользователей
         try {
@@ -749,13 +1096,14 @@
             if (savedUsers) {
                 users = JSON.parse(savedUsers);
             }
-        } catch (e) {}
+        } catch (e) {
+            console.error('Error loading users:', e);
+        }
 
         function saveUsers() {
             localStorage.setItem('vertical_users', JSON.stringify(users));
         }
 
-        // Валидация email
         function isValidEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(email);
@@ -773,12 +1121,17 @@
         function setUser(user) {
             currentUser = user;
             localStorage.setItem('vertical_user', JSON.stringify(user));
+            
+            const sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+            setCookie('session', sessionId, 7);
+            
             updateAuthUI();
         }
 
         function logout() {
             currentUser = null;
             localStorage.removeItem('vertical_user');
+            deleteCookie('session');
             updateAuthUI();
         }
 
@@ -840,7 +1193,6 @@
                 return;
             }
 
-            // Ищем пользователя в базе
             const user = users.find(u => u.email === email && u.password === password);
             
             if (user) {
@@ -879,14 +1231,12 @@
                 return;
             }
 
-            // Проверяем, не занят ли email
             if (users.some(u => u.email === email)) {
                 registerError.textContent = 'Email already registered';
                 registerError.classList.add('show');
                 return;
             }
 
-            // Создаем нового пользователя
             const newUser = {
                 name: name,
                 email: email,
@@ -900,7 +1250,6 @@
             authModal.classList.remove('active');
             registerError.classList.remove('show');
             
-            // Очищаем форму
             document.getElementById('registerName').value = '';
             document.getElementById('registerEmail').value = '';
             document.getElementById('registerPassword').value = '';
@@ -1106,7 +1455,24 @@
         });
 
         // Инициализация
+        document.getElementById('confirmAge').addEventListener('click', confirmAge);
+        document.getElementById('exitSite').addEventListener('click', exitSite);
+        
+        // Cookie consent обработчики
+        document.getElementById('acceptCookies').addEventListener('click', acceptCookies);
+        document.getElementById('declineCookies').addEventListener('click', declineCookies);
+        document.getElementById('viewPolicy').addEventListener('click', showCookiePolicy);
+        document.getElementById('cookiePolicyLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            showCookiePolicy();
+        });
+        
+        // Запускаем проверку возраста
+        checkAge();
+        
+        // Инициализируем авторизацию
         updateAuthUI();
     </script>
 </body>
+            </html>
 </html>
